@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block title %}{{ student.registry.first_name }}'s Portfolio{% endblock %}
+
+{% block content %}
+<style>
+    .profile-avatar {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+</style>
+<div class="container py-5">
+    <!-- Profile Card -->
+    <div class="d-flex justify-content-center mb-5">
+        <div class="card shadow text-center p-4" style="max-width: 400px; width: 100%;">
+            {% if student.profile_image %}
+                <img src="{{ student.profile_image.url }}" class="rounded-circle mb-3" style="width: 120px; height: 120px; object-fit: cover;">
+            {% endif %}
+            <h3 class="mb-1">{{ student.registry.first_name }} {{ student.registry.last_name }}</h3>
+            <p class="text-muted mb-1">{{ student.registry.department }} — {{ student.registry.faculty }}</p>
+            <p class="small">{{ student.bio }}</p>
+            <div class="mb-2">
+                {% if student.github_url %}
+                    <a href="{{ student.github_url }}" target="_blank" class="btn btn-outline-dark btn-sm me-1">GitHub</a>
+                {% endif %}
+                {% if student.linkedin_url %}
+                    <a href="{{ student.linkedin_url }}" target="_blank" class="btn btn-outline-primary btn-sm">LinkedIn</a>
+                {% endif %}
+            </div>
+            {% if request.user.is_authenticated and request.user.role in ("CLIENT", "STUDENT") %}
+                {% if student.favorited_by.filter(user=request.user).exists %}
+                    <a href="{% url 'remove_favorite' student.registry.matric_number %}" class="btn btn-warning btn-sm">Remove Favorite</a>
+                {% else %}
+                    <a href="{% url 'add_favorite' student.registry.matric_number %}" class="btn btn-outline-primary btn-sm">Add to Favorites</a>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Triangle Layout Cards -->
+    <div class="row g-4 justify-content-center">
+        <!-- Projects -->
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Projects</h5>
+                    {% if projects %}
+                        {% for project in projects %}
+                            <div class="mb-3">
+                                <strong>{{ project.title }}</strong>
+                                <p class="mb-1">{{ project.description }}</p>
+                                <small>Tech: {{ project.technologies }}</small>
+                                {% if project.repo_link %}
+                                    <br><a href="{{ project.repo_link }}" target="_blank">View Repo</a>
+                                {% endif %}
+                                <hr>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted">No projects listed.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Research -->
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Research</h5>
+                    {% if research %}
+                        {% for r in research %}
+                            <div class="mb-3">
+                                <strong>{{ r.title }}</strong>
+                                <p class="mb-1">{{ r.abstract }}</p>
+                                {% if r.publication_link %}
+                                    <a href="{{ r.publication_link }}" target="_blank">View Publication</a>
+                                {% endif %}
+                                <hr>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted">No research listed.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Internships -->
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Internships</h5>
+                    {% if internships %}
+                        {% for internship in internships %}
+                            <div class="mb-3">
+                                <strong>{{ internship.role }}</strong>
+                                <p class="mb-1">{{ internship.organization }} — <em>{{ internship.duration }}</em></p>
+                                <p>{{ internship.summary }}</p>
+                                <hr>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted">No internships listed.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+{% block footer %} 
+    <footer class="bg-dark text-light text-center py-3 shadow-sm mt-3">
+        <div class="container">
+            <small>&copy; {{ now|date:"Y" }} EduPortfolio. All rights reserved.</small>
+        </div>
+    </footer>
+{% endblock %}

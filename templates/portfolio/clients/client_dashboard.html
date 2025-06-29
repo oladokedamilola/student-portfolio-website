@@ -1,0 +1,24 @@
+{% extends "base_with_sidebar.html" %}
+{% block title %}Client Dashboard{% endblock %}
+
+{% block content %}
+<h2>Welcome, {{ profile.first_name }}!</h2>
+<p class="text-muted">Start discovering talented students.</p>
+
+<a href="{% url 'public_search' %}" class="btn btn-primary mb-3">Search Students</a>
+
+<hr>
+<h4 id="favorites">Your Favorites</h4>
+{% if profile.favorites.all %}
+    <ul class="list-group mt-3">
+        {% for favorite in profile.favorites.all %}
+            <li class="list-group-item">
+                <strong>{{ favorite.student.registry.first_name }} {{ favorite.student.registry.last_name }}</strong> — {{ favorite.student.registry.department }}
+                <a href="{% url 'public_portfolio' favorite.student.registry.matric_number %}" class="btn btn-sm btn-outline-secondary float-end">View</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No favorites yet.</p>
+{% endif %}
+{% endblock %}

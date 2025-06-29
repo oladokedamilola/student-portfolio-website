@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Search Students{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="text-center mb-4" style="color: var(--primary-color);">Search for Students</h2>
+    <form method="get" class="d-flex justify-content-center mb-5">
+        <div class="input-group" style="max-width: 500px; width: 100%;">
+            <input type="text" name="q" value="{{ query }}" placeholder="Name, department, faculty..." class="form-control shadow-sm rounded-start-pill">
+            <button class="btn btn-primary rounded-end-pill" type="submit">Search</button>
+        </div>
+    </form>
+
+    {% if query %}
+        <h5 class="mb-3">Results for <span class="fw-semibold">"{{ query }}"</span>:</h5>
+        {% if results %}
+            <div class="row">
+                {% for student in results %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card shadow-sm border-0 h-100">
+                            <div class="card-body">
+                                <h5 class="card-title mb-1">{{ student.registry.first_name }} {{ student.registry.last_name }}</h5>
+                                <p class="mb-1"><strong>Department:</strong> {{ student.registry.department }}</p>
+                                <p class="mb-1"><strong>Matric Number:</strong> {{ student.registry.matric_number }}</p>
+                                {% if request.user.is_authenticated and request.user.role == "CLIENT" %}
+                                    <a href="{% url 'public_portfolio' student.registry.matric_number %}" class="btn btn-outline-primary btn-sm mt-2">View Portfolio</a>
+                                {% else %}
+                                    <a href="{% url 'login' %}" class="btn btn-outline-secondary btn-sm mt-2">Login to view portfolio</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-muted">No matching students found.</p>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block footer %} 
+    <footer class="bg-dark text-light text-center py-3 shadow-sm" style="margin-top: 240px;">
+    <div class="container">
+        <small>&copy; {{ now|date:"Y" }} EduPortfolio. All rights reserved.</small>
+    </div>
+{% endblock %}

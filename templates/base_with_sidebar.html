@@ -1,0 +1,143 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %} | EduPortfolio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <link rel="shortcut icon" href="{% static 'images/my-fav-icon.png' %}" type="image/x-icon">
+
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{% url 'home' %}" style="color: var(--primary-color);">EduPortfolio</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mainNavbar">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                <a class="nav-link {% if request.resolver_match.url_name == 'public_search' %}active{% endif %}" href="{% url 'public_search' %}">Search</a>
+                </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'login' %}active{% endif %}" href="{% url 'login' %}">Login</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="signupDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Sign Up <i class="bi bi-caret-down-fill"></i>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="signupDropdown">
+                        <li><a class="dropdown-item" href="{% url 'verify_matric' %}">As a Student</a></li>
+                        <li><a class="dropdown-item" href="{% url 'client_register' %}">As a Client</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+            </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    <div class="container d-flex justify-content-center mt-4">
+        <div class="w-100" style="max-width: 600px;">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show text-center" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+
+            <!-- Sidebar -->
+            <div class="offcanvas offcanvas-start d-md-flex flex-column flex-shrink-0 p-3 bg-white col-md-3 col-lg-2" tabindex="-1" id="sidebarMenu">
+                <div class="offcanvas-header d-md-none">
+                    <h5 class="offcanvas-title">Menu</h5>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body p-0">
+                    {% block sidebar %}
+                        {% if user.is_authenticated and user.role == "STUDENT" %}
+                            {% include "partials/student_sidebar.html" %}
+                        {% elif user.is_authenticated and user.role == "CLIENT" %}
+                            {% include "partials/client_sidebar.html" %}
+                        {% endif %}
+                    {% endblock %}
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+                {% block content %}
+                {% endblock %}
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+     {% block footer %}
+    <footer class="bg-dark text-light text-center py-3 shadow-sm mt-auto">
+        <div class="container">
+            <small>&copy; {{ now|date:"Y" }} EduPortfolio. All rights reserved.</small>
+        </div>
+    </footer>
+     {% endblock footer %}
+    
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Auto-dismiss messages -->
+    <script>
+        setTimeout(function() {
+            var alertNode = document.querySelector('.alert');
+            if (alertNode) {
+                var alert = new bootstrap.Alert(alertNode);
+                alert.close();
+            }
+        }, 7000); // 7 seconds
+    </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        // Always keep it for at least 5 seconds (5000 ms)
+        setTimeout(function() {
+          const preloader = document.getElementById("preloader");
+          if (preloader) {
+            preloader.style.opacity = "0";
+            preloader.style.visibility = "hidden";
+          }
+        }, 5000);
+      });
+    </script>
+    <!-- Preloader -->
+    <div id="preloader">
+      <div class="spinner"></div>
+    </div>
+</body>
+</html>

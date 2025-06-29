@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<!-- Hero Section -->
+<section id="heroSection">
+    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" style="margin-top: 0; padding-top: 0;">
+        <!-- Indicators/dots -->
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+
+        <!-- Slides -->
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="{% static 'images/slide1.jpeg' %}" class="d-block w-100" alt="Slide 1">
+            </div>
+            <div class="carousel-item">
+                <img src="{% static 'images/slide2.jpeg' %}" class="d-block w-100" alt="Slide 2">
+            </div>
+            <div class="carousel-item">
+                <img src="{% static 'images/slide3.jpeg' %}" class="d-block w-100" alt="Slide 3">
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- Features Section -->
+<section class="py-5 bg-light" id="featuresForStudents">
+  <div class="container text-center">
+    <h2 class="mb-4" style="color: var(--primary-color);">Empower Your Academic Journey</h2>
+    <p class="mb-5" style="color: var(--text-color); max-width: 700px; margin: 0 auto;">
+      As a student, you can build your story, showcase your achievements, and connect to shape your future career.
+    </p>
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <div class="card feature-card text-center mx-auto">
+          <div class="card-body d-flex flex-column justify-content-center align-items-center">
+            <i class="bi bi-pencil-square icon-large mb-3"></i>
+            <h5 class="card-title">I Can Create</h5>
+            <p class="card-text">Design a stunning academic portfolio that truly reflects my journey and passions.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card feature-card text-center mx-auto">
+          <div class="card-body d-flex flex-column justify-content-center align-items-center">
+            <i class="bi bi-easel icon-large mb-3"></i>
+            <h5 class="card-title">I Can Showcase</h5>
+            <p class="card-text">Highlight my projects, research, and internships in a professional, engaging way.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card feature-card text-center mx-auto">
+          <div class="card-body d-flex flex-column justify-content-center align-items-center">
+            <i class="bi bi-people icon-large mb-3"></i>
+            <h5 class="card-title">I Can Connect</h5>
+            <p class="card-text">Reach and impress potential employers, mentors, and global academic networks.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- For Clients Section -->
+<section class="py-5 bg-light" id="forClients">
+  <div class="container text-center">
+    <h2 class="mb-3" style="color: var(--primary-color);">Get Access to Top University Talent</h2>
+    <p class="mb-5" style="color: var(--text-color); max-width: 700px; margin: 0 auto;">
+      Connect directly with outstanding students, recent graduates, and emerging professionals. Discover talent, offer opportunities, and build meaningful collaborations effortlessly.
+    </p>
+    <div class="row justify-content-center">
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm p-4 text-center">
+          <i class="bi bi-search" style="font-size: 2.5rem; color: var(--primary-color);"></i>
+          <h5 class="mt-3">Browse Portfolios</h5>
+          <p>Explore detailed academic and project portfolios easily to find the perfect match.</p>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm p-4 text-center">
+          <i class="bi bi-award" style="font-size: 2.5rem; color: var(--primary-color);"></i>
+          <h5 class="mt-3">Discover Skills</h5>
+          <p>Identify specialized skills and achievements that align with your organization's needs.</p>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm p-4 text-center">
+          <i class="bi bi-person-plus" style="font-size: 2.5rem; color: var(--primary-color);"></i>
+          <h5 class="mt-3">Connect & Recruit</h5>
+          <p>Reach out directly to top talents and start building future-ready teams.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Testimonials Section -->
+<div class="py-5">
+  <h3 class="text-center mb-4">What Our Users Are Saying</h3>
+  <div class="testimonial-container">
+    <div class="testimonial-track">
+      <div class="testimonial card shadow-sm p-3 d-flex flex-row align-items-center">
+        <img src="{% static 'images/testimonials/client1.jpg' %}" alt="John A." class="testimonial-img me-3">
+        <div>
+          <p class="mb-1">"I landed an internship through my portfolio here!"</p>
+          <small class="text-muted">— John A.</small>
+        </div>
+      </div>
+      <div class="testimonial card shadow-sm p-3 d-flex flex-row align-items-center">
+        <img src="{% static 'images/testimonials/client2.jpg' %}" alt="Ada O." class="testimonial-img me-3">
+        <div>
+          <p class="mb-1">"The easiest way to present my research work."</p>
+          <small class="text-muted">— Ada O.</small>
+        </div>
+      </div>
+      <div class="testimonial card shadow-sm p-3 d-flex flex-row align-items-center">
+        <img src="{% static 'images/testimonials/client3.jpg' %}" alt="Sarah T." class="testimonial-img me-3">
+        <div>
+          <p class="mb-1">"Recruiters loved my clean profile design!"</p>
+          <small class="text-muted">— Sarah T.</small>
+        </div>
+      </div>
+      <div class="testimonial card shadow-sm p-3 d-flex flex-row align-items-center">
+        <img src="{% static 'images/testimonials/client4.jpg' %}" alt="Michael B." class="testimonial-img me-3">
+        <div>
+          <p class="mb-1">"Showcasing my projects has never been easier."</p>
+          <small class="text-muted">— Michael B.</small>
+        </div>
+      </div>
+      <div class="testimonial card shadow-sm p-3 d-flex flex-row align-items-center">
+        <img src="{% static 'images/testimonials/client5.jpg' %}" alt="Fatima K." class="testimonial-img me-3">
+        <div>
+          <p class="mb-1">"Got noticed by a top university thanks to this platform."</p>
+          <small class="text-muted">— Fatima K.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA Section -->
+<div class="text-center py-5">
+  <h4 class="mb-3">Ready to create your professional portfolio?</h4>
+  <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#getStartedModal">
+    Get Started
+  </button>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="getStartedModal" tabindex="-1" aria-labelledby="getStartedModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content custom-modal">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" id="getStartedModalLabel">Choose your path</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body d-flex flex-column align-items-center text-center">
+        <p class="mb-4">Start your journey as a student or a client.</p>
+        <a href="{% url 'verify_matric' %}" class="btn btn-primary w-100 mb-3 d-flex align-items-center justify-content-center">
+          <i class="bi bi-mortarboard-fill me-2"></i> Register as Student
+        </a>
+        <a href="{% url 'client_register' %}" class="btn btn-accent w-100 d-flex align-items-center justify-content-center">
+          <i class="bi bi-person-check-fill me-2"></i> Register as Client
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const track = document.querySelector(".testimonial-track");
+  const testimonials = Array.from(document.querySelectorAll(".testimonial"));
+
+  // Duplicate testimonials for seamless loop
+  testimonials.forEach(t => {
+    const clone = t.cloneNode(true);
+    track.appendChild(clone);
+  });
+
+  // Mobile: Disable scroll and fade instead
+  if (window.innerWidth <= 768) {
+    track.style.animation = "none";
+    testimonials.forEach((t, i) => { if (i !== 0) t.style.display = "none"; });
+
+    let index = 0;
+    setInterval(() => {
+      testimonials[index].style.display = "none";
+      index = (index + 1) % testimonials.length;
+      testimonials[index].style.display = "flex";
+    }, 3000);
+  }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base_with_sidebar.html" %}
+{% block title %}Notifications{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h2 class="mb-4" style="color: var(--primary-color);">Your Notifications</h2>
+    {% if notifications %}
+        <ul class="list-group shadow-sm">
+            {% for note in notifications %}
+                <li class="list-group-item d-flex flex-column {% if not note.is_read %}list-group-item-info{% endif %}">
+                    <div>{{ note.message }}</div>
+                    <small class="text-muted mt-1">{{ note.created_at|date:"M d, Y H:i" }}</small>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="alert alert-info">No notifications yet. Stay tuned!</div>
+    {% endif %}
+</div>
+{% endblock %}
+
+
+
+{% block footer %} 
+    <footer class="bg-dark text-light text-center py-3 shadow-sm mt-3">
+        <div class="container">
+            <small>&copy; {{ now|date:"Y" }} EduPortfolio. All rights reserved.</small>
+        </div>
+    </footer>
+{% endblock %}

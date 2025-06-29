@@ -1,0 +1,18 @@
+<a href="{% url 'add_research' %}" class="btn btn-sm btn-success mb-3">+ Add Research</a>
+
+{% if research %}
+  <ul class="list-group">
+    {% for paper in research %}
+      <li class="list-group-item">
+        <strong>{{ paper.title }}</strong><br>
+        {{ paper.abstract|truncatewords:20 }}
+        <div class="mt-2">
+          <a href="{% url 'edit_research' paper.pk %}" class="btn btn-sm btn-primary">Edit</a>
+          <a href="{% url 'delete_research' paper.pk %}" class="btn btn-sm btn-danger">Delete</a>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No research work added yet.</p>
+{% endif %}

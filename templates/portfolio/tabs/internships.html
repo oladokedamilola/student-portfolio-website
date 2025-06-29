@@ -1,0 +1,17 @@
+<a href="{% url 'add_internship' %}" class="btn btn-sm btn-success mb-3">+ Add Internship</a>
+
+{% if internships %}
+  <ul class="list-group">
+    {% for i in internships %}
+      <li class="list-group-item">
+        <strong>{{ i.role }}</strong> at {{ i.organization }}<br>
+        <small>{{ i.duration }}</small>
+        <p>{{ i.summary|truncatewords:20 }}</p>
+        <a href="{% url 'edit_internship' i.pk %}" class="btn btn-sm btn-primary">Edit</a>
+        <a href="{% url 'delete_internship' i.pk %}" class="btn btn-sm btn-danger">Delete</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No internship added yet.</p>
+{% endif %}

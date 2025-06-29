@@ -1,0 +1,39 @@
+{% extends "base_with_sidebar.html" %}
+{% block title %}{{ form.instance.pk|yesno:"Edit Internship,Add Internship" }}{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 600px;">
+    <div class="card shadow-sm p-4">
+        <h4 class="text-center mb-3" style="color: var(--primary-color);">{{ form.instance.pk|yesno:"Edit Internship,Add Internship" }}</h4>
+
+        {% if form.errors %}
+            <div class="alert alert-danger">Please correct the errors below.</div>
+        {% endif %}
+
+        <form method="post" novalidate>
+            {% csrf_token %}
+
+            {% for field in form %}
+                <div class="mb-3">
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="text-danger">{{ field.errors }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <button type="submit" class="btn btn-primary w-100">Save</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block footer %} 
+    <footer class="bg-dark text-light text-center py-3 shadow-sm mt-3">
+        <div class="container">
+            <small>&copy; {{ now|date:"Y" }} EduPortfolio. All rights reserved.</small>
+        </div>
+    </footer>
+{% endblock %}
