@@ -1,0 +1,24 @@
+<div id="notif-{{ note.id }}" class="list-group-item d-flex justify-content-between align-items-start {% if not note.is_read %}bg-light{% endif %} mb-2 rounded shadow-sm" style="border: 1px solid #e0e0e0;">
+  <div class="me-3" style="flex: 1;">
+    <p class="mb-1" style="font-size: 0.95rem;">
+      {% if "approved" in note.message|lower %}
+        <i class="fas fa-check-circle text-success me-1"></i>
+      {% elif "rejected" in note.message|lower %}
+        <i class="fas fa-times-circle text-danger me-1"></i>
+      {% elif "message from" in note.message|lower %}
+        <i class="fas fa-envelope text-primary me-1"></i>
+      {% else %}
+        <i class="fas fa-bell text-warning me-1"></i>
+      {% endif %}
+      {{ note.message }}
+    </p>
+    <small class="text-muted">{{ note.created_at|date:"M d, Y H:i" }}</small>
+  </div>
+  <div class="d-flex flex-column align-items-end">
+    {% if not note.is_read %}
+      <button class="btn btn-sm btn-outline-secondary rounded-pill mb-1" onclick="markRead({{ note.id }})" style="font-size: 0.75rem;">Mark as read</button>
+      <span class="badge bg-primary">New</span>
+    {% endif %}
+    <button class="btn btn-sm btn-outline-danger rounded-pill mt-1" onclick="deleteNotif({{ note.id }})" style="font-size: 0.75rem;">Delete</button>
+  </div>
+</div>

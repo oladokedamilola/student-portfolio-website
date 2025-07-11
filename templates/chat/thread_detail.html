@@ -1,0 +1,151 @@
+{% extends "base_with_sidebar.html" %}
+{% block title %}Conversation{% endblock %}
+
+{% block flash %}
+{% endblock flash %}
+
+{% block content %}
+<div class="container my-5">
+    <h3 class="mb-4" style="color: var(--primary-color);">Chat with 
+        {% if request.user.role == "CLIENT" %}
+            {{ thread.student.registry.first_name }}
+        {% else %}
+            {{ thread.client.first_name }}
+        {% endif %}
+    </h3>
+    
+    <div id="messages-container" class="border p-3 mb-2" style="height: 500px; overflow-y: scroll; background-color: #f0f2f5; border-radius: 8px;">
+        {% include 'chat/messages_partial.html' with messages=messages user=request.user %}
+    </div>
+
+    <form id="message-form" method="post">
+        {% csrf_token %}
+        <div class="input-group">
+            <textarea name="content" id="content-input" class="form-control" placeholder="Type your message..." rows="2" required></textarea>
+            <button type="submit" class="btn btn-primary">Send</button>
+        </div>
+    </form>
+
+    <a href="{% url 'chat_inbox' %}" class="btn btn-outline-secondary btn-sm mt-3">← Back to Inbox</a>
+</div>
+
+<audio id="notification-sound" src="https://notificationsounds.com/storage/sounds/file-sounds-1156-pristine.mp3" preload="auto"></audio>
+
+<script>
+const messageForm = document.getElementById("message-form");
+const contentInput = document.getElementById("content-input");
+const messagesContainer = document.getElementById("messages-container");
+const notificationSound = document.getElementById("notification-sound");
+
+let lastMessageIds = Array.from(messagesContainer.querySelectorAll("[id^='msg-']")).map(el => el.id);
+
+messageForm.addEventListener("submit", function(e) {
+    e.preventDefault();
+    const formData = new FormData(messageForm);
+
+    fetch(window.location.href, {
+        method: "POST",
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        body: formData
+    })
+    .then(resp => resp.json())
+    .then(data => {
+        if (data.status === "success") {
+            messagesContainer.innerHTML = data.html;
+            messageForm.reset();
+            scrollMessagesToBottom();
+        } else {
+            console.log("Message send failed:", data);
+        }
+    })
+    .catch(error => console.error("Error sending message:", error));
+});
+
+function fetchMessages() {
+    fetch(window.location.href, {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "success") {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(data.html, 'text/html');
+            const newMessageElements = doc.querySelectorAll("[id^='msg-']");
+            const newIds = Array.from(newMessageElements).map(el => el.id);
+
+            const newMessageAppeared = newIds.some(id => !lastMessageIds.includes(id));
+            if (newMessageAppeared) {
+                notificationSound.play();
+            }
+
+            messagesContainer.innerHTML = data.html;
+            scrollMessagesToBottom();
+            lastMessageIds = newIds;
+        }
+    })
+    .catch(error => console.error("Error fetching messages:", error));
+}
+
+function scrollMessagesToBottom() {
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+setInterval(fetchMessages, 5000);
+scrollMessagesToBottom();
+</script>
+
+<style>
+#messages-container .message-bubble {
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 10px;
+}
+
+#messages-container .bubble-content {
+    padding: 8px 12px;
+    border-radius: 18px;
+    max-width: 70%;
+    position: relative;
+    word-break: break-word;
+}
+
+#messages-container .bubble-time {
+    font-size: 0.75rem;
+    margin-top: 4px;
+    color: #6c757d;
+    display: block;
+}
+
+#messages-container .text-end .bubble-content {
+    background-color: #d9fdd3;
+    margin-left: auto;
+}
+
+#messages-container .text-start .bubble-content {
+    background-color: #fff;
+    margin-right: auto;
+}
+
+#messages-container .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+#messages-container .seen-indicator {
+    font-size: 0.7rem;
+    color: #198754;
+    margin-left: 5px;
+}
+
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+</style>
+{% endblock %}

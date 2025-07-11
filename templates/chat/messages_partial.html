@@ -1,0 +1,33 @@
+{% load profile_extras %}
+
+{% for message in messages %}
+  <div class="d-flex {% if message.sender == user %}justify-content-end{% else %}justify-content-start{% endif %} mb-2">
+    {% if message.sender == user %}
+      <div class="d-flex align-items-end">
+        <div class="p-2 rounded me-2" style="background-color: #dcf8c6; max-width: 300px;">
+          <div class="small">{{ message.content }}</div>
+          <div class="text-muted small text-end">{{ message.timestamp|date:"M d, H:i" }}</div>
+        </div>
+        {% get_profile_image message.sender as img_url %}
+        {% if img_url %}
+          <img src="{{ img_url }}" alt="Profile" class="rounded-circle" style="width: 32px; height: 32px;">
+        {% else %}
+          <i class="fas fa-user-circle fa-2x text-secondary"></i>
+        {% endif %}
+      </div>
+    {% else %}
+      <div class="d-flex align-items-end">
+        {% get_profile_image message.sender as img_url %}
+        {% if img_url %}
+          <img src="{{ img_url }}" alt="Profile" class="rounded-circle me-2" style="width: 32px; height: 32px;">
+        {% else %}
+          <i class="fas fa-user-circle fa-2x text-secondary me-2"></i>
+        {% endif %}
+        <div class="p-2 rounded" style="background-color: #ffffff; max-width: 300px;">
+          <div class="small">{{ message.content }}</div>
+          <div class="text-muted small text-end">{{ message.timestamp|date:"M d, H:i" }}</div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+{% endfor %}

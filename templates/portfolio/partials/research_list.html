@@ -1,0 +1,23 @@
+<!-- templates/portfolio/partials/research_list.html -->
+<div class="row">
+    {% for research in researches %}
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ research.title }}</h5>
+                    <p class="card-text">{{ research.abstract|truncatewords:30 }}</p>
+                    {% if research.publication_link %}
+                        <a href="{{ research.publication_link }}" class="btn btn-primary btn-sm" target="_blank">View Publication</a>
+                    {% endif %}
+                    {% if research.document %}
+                        <a href="{{ research.document.url }}" class="btn btn-outline-secondary btn-sm" target="_blank">Download Document</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="col-12">
+            <p class="text-muted text-center">No research papers added yet.</p>
+        </div>
+    {% endfor %}
+</div>

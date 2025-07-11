@@ -8,13 +8,6 @@
 <div class="container d-flex justify-content-center align-items-center mt-3" style="min-height: 90vh;">
     <div class="card shadow p-4" style="max-width: 500px; width: 100%;">
         <h4 class="text-center mb-3" style="color: var(--primary-color);">Client Registration</h4>
-
-        {% if form.errors %}
-            <div class="alert alert-danger">
-                Please correct the error{% if form.errors|length > 1 %}s{% endif %} below.
-            </div>
-        {% endif %}
-
         <form method="post" novalidate>
             {% csrf_token %}
 
@@ -101,7 +94,7 @@ document.querySelectorAll('.toggle-password').forEach(function(icon) {
 {% endblock %}
 
 {% block footer %} 
-    <footer class="bg-dark text-light text-center py-3 shadow-sm mt-3">
+    <footer class="bg-dark text-light text-center py-3 shadow-sm mt-5">
         <div class="container">
             <small>&copy; {{ now|date:"Y" }} EduPortfolio. All rights reserved.</small>
         </div>

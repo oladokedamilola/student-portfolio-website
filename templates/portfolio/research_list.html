@@ -1,0 +1,49 @@
+{% extends "base_with_sidebar.html" %}
+{% block title %}Research{% endblock %}
+
+{% block content %}
+<div class="container m-4">
+    <h3 class="mb-4" style="color: var(--primary-color);">My Research</h3>
+    <div class="row">
+        {% for research in researches %}
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm h-100 border-0 rounded-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ research.title }}</h5>
+                    <p class="card-text">{{ research.abstract|truncatewords:20 }}</p>
+                    <a href="{% url 'research_detail' research.student.registry.matric_number research.pk %}" class="btn btn-outline-primary btn-sm rounded-pill">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>No research entries available.</p>
+        {% endfor %}
+    </div>
+
+    {% if researches.has_other_pages %}
+    <nav aria-label="Research pagination">
+      <ul class="pagination justify-content-center">
+        {% if researches.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ researches.previous_page_number }}">Previous</a>
+          </li>
+        {% endif %}
+
+        {% for num in researches.paginator.page_range %}
+          {% if researches.number == num %}
+            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+          {% elif num > researches.number|add:'-3' and num < researches.number|add:'3' %}
+            <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+          {% endif %}
+        {% endfor %}
+
+        {% if researches.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ researches.next_page_number }}">Next</a>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}

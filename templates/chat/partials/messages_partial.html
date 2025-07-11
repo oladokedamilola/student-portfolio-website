@@ -1,0 +1,8 @@
+{% for message in messages %}
+    <div id="msg-{{ message.id }}" class="mb-2 {% if message.sender == user %}text-end{% else %}text-start{% endif %}">
+        <small><strong>{{ message.sender.email }}</strong> — {{ message.timestamp|date:"M d, H:i" }}</small><br>
+        <span>{{ message.content }}</span>
+    </div>
+{% empty %}
+    <p>No messages yet.</p>
+{% endfor %}

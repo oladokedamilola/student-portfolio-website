@@ -1,0 +1,34 @@
+{% extends "base_with_sidebar.html" %}
+{% block title %}Chat Inbox{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h3 class="mb-4" style="color: var(--primary-color);">Your Conversations</h3>
+    {% if threads %}
+        <ul class="list-group" style="max-width: 600px;">
+            {% for thread in threads %}
+                <li class="list-group-item d-flex justify-content-between align-items-center flex-column flex-md-row text-start">
+                    <div class="w-100">
+                        {% if request.user.role == "CLIENT" %}
+                            <strong>{{ thread.student.registry.first_name }} {{ thread.student.registry.last_name }}</strong>
+                        {% else %}
+                            <strong>{{ thread.client.first_name }} {{ thread.client.last_name }}</strong>
+                        {% endif %}
+                        {% if thread.last_message %}
+                            <div class="small text-muted mt-1">
+                                {{ thread.last_message.content|truncatechars:50 }} — {{ thread.last_message.timestamp|timesince }} ago
+                                {% if not thread.last_message.is_read and thread.last_message.sender != request.user %}
+                                    <span class="badge bg-primary">New</span>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <a href="{% url 'chat_detail' thread.id %}" class="btn btn-outline-primary btn-sm mt-2 mt-md-0">Open</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No active conversations yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

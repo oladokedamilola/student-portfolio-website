@@ -20,7 +20,35 @@
     <link rel="shortcut icon" href="{% static 'images/my-fav-icon.png' %}" type="image/x-icon">
 </head>
 <body>
+<style>
+  /* =======================
+✨ Flash Message
+========================== */
+/* Flash message container overlay */
+.flash-message-container {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 500px;
+  z-index: 1055;
+  /* Above most elements */
+}
 
+/* Optional: fade-in animation */
+.flash-message-container .alert {
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+</style>
     <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
   <div class="container">
@@ -34,7 +62,19 @@
         <li class="nav-item">
           <a class="nav-link {% if request.resolver_match.url_name == 'public_search' %}active{% endif %}" href="{% url 'public_search' %}">Search</a>
         </li>
+
         {% if user.is_authenticated %}
+          <!-- Dashboard link based on role -->
+          {% if user.role == "STUDENT" %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'student_dashboard' %}">Dashboard</a>
+            </li>
+          {% elif user.role == "CLIENT" %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'client_dashboard' %}">Dashboard</a>
+            </li>
+          {% endif %}
+
           <li class="nav-item">
             <a class="nav-link" href="{% url 'logout' %}">Logout</a>
           </li>
@@ -42,40 +82,62 @@
           <li class="nav-item">
             <a class="nav-link {% if request.resolver_match.url_name == 'login' %}active{% endif %}" href="{% url 'login' %}">Login</a>
           </li>
-        <li class="nav-item dropdown">
+          <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="signupDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Sign Up <i class="bi bi-caret-down-fill"></i>
+              Sign Up <i class="bi bi-caret-down-fill"></i>
             </a>
             <ul class="dropdown-menu" aria-labelledby="signupDropdown">
-                <li><a class="dropdown-item" href="{% url 'verify_matric' %}">As a Student</a></li>
-                <li><a class="dropdown-item" href="{% url 'client_register' %}">As a Client</a></li>
+              <li><a class="dropdown-item" href="{% url 'verify_matric' %}">As a Student</a></li>
+              <li><a class="dropdown-item" href="{% url 'client_register' %}">As a Client</a></li>
             </ul>
-        </li>
+          </li>
         {% endif %}
       </ul>
     </div>
   </div>
 </nav>
 
-    <!-- Flash Messages -->
-    <div class="container d-flex justify-content-center">
-        <div class="w-100" style="max-width: 600px;">
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show text-center" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                {% endfor %}
-            {% endif %}
-        </div>
-    </div>
+
+<!-- Flash Messages -->
+<div class="flash-message-container">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{% if message.tags == "error" %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show text-center" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+
 
     <!-- Main Content -->
     <main>
         {% block content %}
         {% endblock %}
     </main>
+    <!-- Modal -->
+<div class="modal fade" id="getStartedModal" tabindex="-1" aria-labelledby="getStartedModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content custom-modal">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" id="getStartedModalLabel">Choose your path</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body d-flex flex-column align-items-center text-center">
+        <p class="mb-4">Start your journey as a student or a client.</p>
+        <a href="{% url 'verify_matric' %}" class="btn btn-primary w-100 mb-3 d-flex align-items-center justify-content-center">
+          <i class="bi bi-mortarboard-fill me-2"></i> Register as Student
+        </a>
+        <a href="{% url 'client_register' %}" class="btn btn-accent w-100 d-flex align-items-center justify-content-center">
+          <i class="bi bi-person-check-fill me-2"></i> Register as Client
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <!-- Footer -->
  {% block footer %}
@@ -125,6 +187,78 @@
             }
         }, 7000); // 7 seconds
     </script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const track = document.querySelector(".testimonial-track");
+  const allTestimonials = Array.from(document.querySelectorAll(".testimonial")); // Save original
+  let testimonials = [...allTestimonials];
+  let intervalId;
+
+  function setupDesktop() {
+    track.innerHTML = "";
+    track.classList.add("flex-track");
+
+    testimonials.forEach(t => {
+      t.style.opacity = "1";
+      t.classList.remove("fade");
+      track.appendChild(t.cloneNode(true));
+    });
+
+    testimonials.forEach(t => {
+      const clone = t.cloneNode(true);
+      track.appendChild(clone);
+    });
+
+    track.style.animation = "scroll 30s linear infinite";
+  }
+
+  function setupMobile() {
+    track.innerHTML = "";
+    track.classList.remove("flex-track");
+
+    let index = 0;
+    const firstClone = testimonials[index].cloneNode(true);
+    firstClone.classList.add("fade");
+    firstClone.style.opacity = "1";
+    track.appendChild(firstClone);
+
+    intervalId = setInterval(() => {
+      track.innerHTML = "";
+
+      index = (index + 1) % testimonials.length;
+      const nextClone = testimonials[index].cloneNode(true);
+      nextClone.classList.add("fade");
+      nextClone.style.opacity = "0";
+      track.appendChild(nextClone);
+
+      // Force reflow for transition
+      void nextClone.offsetWidth;
+      nextClone.style.opacity = "1";
+    }, 3000);
+  }
+
+  function init() {
+    if (intervalId) clearInterval(intervalId);
+    testimonials = [...allTestimonials]; // Reset from original always
+
+    if (window.innerWidth <= 768) {
+      track.style.animation = "none";
+      setupMobile();
+    } else {
+      setupDesktop();
+    }
+  }
+
+  init();
+  window.addEventListener("resize", init);
+});
+</script>
+
+
+
+
+
     <script>
       document.addEventListener("DOMContentLoaded", function() {
         // Always keep it for at least 5 seconds (5000 ms)
@@ -134,7 +268,7 @@
             preloader.style.opacity = "0";
             preloader.style.visibility = "hidden";
           }
-        }, 5000);
+        }, 3000);
       });
     </script>
     <!-- Preloader -->

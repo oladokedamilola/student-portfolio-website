@@ -1,24 +1,73 @@
 {% extends "base_with_sidebar.html" %}
+{% load static %}
 {% block title %}Client Dashboard{% endblock %}
 
 {% block content %}
-<h2>Welcome, {{ profile.first_name }}!</h2>
-<p class="text-muted">Start discovering talented students.</p>
+<div class="container mt-5 mb-5">
 
-<a href="{% url 'public_search' %}" class="btn btn-primary mb-3">Search Students</a>
+  <!-- Welcome & Profile Card -->
+  <div class="card border-0 shadow-sm mb-4 p-4">
+    <div class="row g-3 align-items-center">
+      <div class="col-md-3 text-center">
+        {% if profile.profile_image %}
+          <img src="{{ profile.profile_image.url }}" alt="Profile Image"
+               class="rounded-circle img-fluid"
+               style="width: 120px; height: 120px; object-fit: cover;">
+        {% else %}
+          <img src="{% static 'images/user.jpg' %}" alt="Default Image"
+               class="rounded-circle img-fluid"
+               style="width: 120px; height: 120px; object-fit: cover;">
+        {% endif %}
+      </div>
+      <div class="col-md-9 text-start">
+        <h4 class="fw-semibold mb-1">Welcome, {{ profile.first_name }} {{ profile.last_name }}</h4>
+        {% if profile.company_name %}
+          <p class="mb-1 text-muted">{{ profile.company_name }}</p>
+        {% endif %}
+        {% if profile.industry %}
+          <p class="mb-2 text-muted">{{ profile.industry }}</p>
+        {% endif %}
+        <a href="{% url 'public_search' %}" class="btn btn-primary btn-sm">Search Students</a>
+      </div>
+    </div>
+  </div>
 
-<hr>
-<h4 id="favorites">Your Favorites</h4>
-{% if profile.favorites.all %}
-    <ul class="list-group mt-3">
-        {% for favorite in profile.favorites.all %}
-            <li class="list-group-item">
-                <strong>{{ favorite.student.registry.first_name }} {{ favorite.student.registry.last_name }}</strong> — {{ favorite.student.registry.department }}
-                <a href="{% url 'public_portfolio' favorite.student.registry.matric_number %}" class="btn btn-sm btn-outline-secondary float-end">View</a>
-            </li>
-        {% endfor %}
-    </ul>
+  <h5 class="fw-semibold mb-3">Your Favorites</h5>
+{% if favorites %}
+  <div class="row g-3">
+    {% for favorite in favorites %}
+      {% with student=favorite.student %}
+        <div class="col-12 col-sm-6 col-md-4 d-flex justify-content-center">
+          <div class="card h-100 shadow-sm border-0 rounded-3 text-center" style="background-color: var(--card-bg-color); max-width: 220px;">
+            
+            {% if student.profile_image %}
+              <img src="{{ student.profile_image.url }}" alt="Profile Image" class="card-img-top rounded-top" style="height: 90px; object-fit: cover;">
+            {% else %}
+              <img src="{% static 'images/user.jpg' %}" alt="Default Profile" class="card-img-top rounded-top" style="height: 90px; object-fit: cover;">
+            {% endif %}
+
+            <div class="card-body p-2">
+              <h6 class="fw-bold mb-1" style="font-size: 0.85rem;">{{ student.registry.first_name }} {{ student.registry.last_name }}</h6>
+              <p class="text-muted mb-2" style="font-size: 0.7rem;">{{ student.registry.department|default:"No department" }}</p>
+              
+              {% if student.registry and student.registry.matric_number %}
+                <a href="{% url 'public_portfolio' student.registry.matric_number %}" class="btn btn-xs btn-outline-primary w-100 rounded-pill mb-1" style="font-size: 0.75rem; padding: 4px 6px;">View Portfolio</a>
+                <a href="{% url 'start_chat' student.registry.matric_number %}" class="btn btn-xs btn-primary w-100 rounded-pill" style="font-size: 0.75rem; padding: 4px 6px;">Message Student</a>
+              {% else %}
+                <span class="text-muted small">Profile unavailable</span>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endwith %}
+    {% endfor %}
+  </div>
 {% else %}
-    <p>No favorites yet.</p>
+  <div class="card text-center p-4 border-0">
+    <p class="text-muted mb-2">You haven't added any favorites yet.</p>
+    <a href="{% url 'public_search' %}" class="btn btn-outline-primary btn-sm">Find Students</a>
+  </div>
 {% endif %}
+
+</div>
 {% endblock %}

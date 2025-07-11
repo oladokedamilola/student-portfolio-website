@@ -1,5 +1,31 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.db import models
+  
+
+class StudentRegistry(models.Model):
+    matric_number = models.CharField(max_length=9, primary_key=True)
+    first_name = models.CharField(max_length=50)
+    middle_name = models.CharField(max_length=50, blank=True)
+    last_name = models.CharField(max_length=50)
+    date_of_birth = models.DateField()
+    faculty = models.CharField(max_length=100)
+    department = models.CharField(max_length=100)
+    level = models.CharField(max_length=3)
+    year_of_entry = models.CharField(max_length=4)
+
+    def __str__(self):
+        return f"{self.matric_number} - {self.last_name} {self.first_name}"
+
+class NINDatabase(models.Model):
+    nin = models.CharField(max_length=11, primary_key=True) 
+    first_name = models.CharField(max_length=50)
+    middle_name = models.CharField(max_length=50, blank=True)
+    last_name = models.CharField(max_length=50)
+    date_of_birth = models.DateField()
+
+    def __str__(self):
+        return f"{self.nin} - {self.last_name} {self.first_name}"
+
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, role=None, **extra_fields):
@@ -39,30 +65,15 @@ class User(AbstractBaseUser, PermissionsMixin):
 class StudentProfile(models.Model):
     user = models.OneToOneField('User', on_delete=models.CASCADE)
     registry = models.OneToOneField('StudentRegistry', on_delete=models.CASCADE)
-
-    # Additional (editable) fields
-    bio = models.TextField(blank=True)
+    header = models.CharField(max_length=150, blank=True, help_text="A short headline, e.g., 'Aspiring Data Scientist | Python & ML'.")
+    about = models.TextField(blank=True)
     github_url = models.URLField(blank=True)
     linkedin_url = models.URLField(blank=True)
     profile_image = models.ImageField(upload_to='student_profiles/', blank=True)
 
     def __str__(self):
         return f"{self.registry.matric_number} - {self.registry.first_name} {self.registry.last_name}"
-
-
-class StudentRegistry(models.Model):
-    matric_number = models.CharField(max_length=20, primary_key=True)
-    first_name = models.CharField(max_length=50)
-    middle_name = models.CharField(max_length=50, blank=True)
-    last_name = models.CharField(max_length=50)
-    date_of_birth = models.DateField()
-    faculty = models.CharField(max_length=100)
-    department = models.CharField(max_length=100)
-    level = models.CharField(max_length=10)
-
-    def __str__(self):
-        return f"{self.matric_number} - {self.last_name} {self.first_name}"
-
+    
 
 class ClientProfile(models.Model):
     user = models.OneToOneField('User', on_delete=models.CASCADE)
@@ -72,6 +83,7 @@ class ClientProfile(models.Model):
     company_name = models.CharField(max_length=100, blank=True)
     industry = models.CharField(max_length=100, blank=True)
     profile_image = models.ImageField(upload_to='client_profiles/', blank=True) 
+    favorites = models.ManyToManyField('StudentProfile', related_name='favorited_by', blank=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} ({self.user.email})"

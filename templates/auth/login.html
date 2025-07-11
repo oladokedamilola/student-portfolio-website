@@ -2,19 +2,17 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
+<style>
+  .clickable-link {
+  cursor: pointer;
+}
+</style>
   <!-- Include Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
   <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
     <div class="card shadow p-4" style="max-width: 450px; width: 100%;">
       <h4 class="text-center mb-4" style="color: var(--primary-color);">Welcome Back</h4>
-
-      {% if form.errors %}
-        <div class="alert alert-danger">
-          Please correct the error{% if form.errors|length > 1 %}s{% endif %} below.
-        </div>
-      {% endif %}
-
       <form method="post" novalidate>
         {% csrf_token %}
 
@@ -41,7 +39,7 @@
       </form>
 
       <div class="text-center mt-3">
-        <small>Don't have an account? <a href="{% url 'verify_matric' %}" style="color: var(--primary-color);">Sign up</a></small>
+        <small>Don't have an account? <a data-bs-toggle="modal" data-bs-target="#getStartedModal" class="clickable-link" style="color: var(--primary-color);">Sign up</a></small>
       </div>
     </div>
   </div>

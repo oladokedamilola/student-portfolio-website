@@ -4,7 +4,6 @@
 
 {% block content %}
 <!-- Hero Section -->
-<!-- Hero Section -->
 <section id="heroSection">
     <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" style="margin-top: 0; padding-top: 0;">
         <!-- Indicators/dots -->
@@ -157,53 +156,5 @@
   </button>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="getStartedModal" tabindex="-1" aria-labelledby="getStartedModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content custom-modal">
-      <div class="modal-header border-0">
-        <h5 class="modal-title" id="getStartedModalLabel">Choose your path</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body d-flex flex-column align-items-center text-center">
-        <p class="mb-4">Start your journey as a student or a client.</p>
-        <a href="{% url 'verify_matric' %}" class="btn btn-primary w-100 mb-3 d-flex align-items-center justify-content-center">
-          <i class="bi bi-mortarboard-fill me-2"></i> Register as Student
-        </a>
-        <a href="{% url 'client_register' %}" class="btn btn-accent w-100 d-flex align-items-center justify-content-center">
-          <i class="bi bi-person-check-fill me-2"></i> Register as Client
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
 
-{% endblock %}
-
-{% block extra_js %}
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  const track = document.querySelector(".testimonial-track");
-  const testimonials = Array.from(document.querySelectorAll(".testimonial"));
-
-  // Duplicate testimonials for seamless loop
-  testimonials.forEach(t => {
-    const clone = t.cloneNode(true);
-    track.appendChild(clone);
-  });
-
-  // Mobile: Disable scroll and fade instead
-  if (window.innerWidth <= 768) {
-    track.style.animation = "none";
-    testimonials.forEach((t, i) => { if (i !== 0) t.style.display = "none"; });
-
-    let index = 0;
-    setInterval(() => {
-      testimonials[index].style.display = "none";
-      index = (index + 1) % testimonials.length;
-      testimonials[index].style.display = "flex";
-    }, 3000);
-  }
-});
-</script>
 {% endblock %}

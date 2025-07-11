@@ -182,6 +182,7 @@ a:hover {
 ========================== */
 .alert {
   border-radius: 0.5rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
 }
 
 /* =======================
@@ -203,27 +204,77 @@ a:hover {
   transform: scale(1.03);
 }
 
-/* =======================
-🎯 Sidebar Specific (if used)
-========================== */
+/* ==============================
+🎨 Updated Sidebar & Global Styles
+============================== */
+
 .sidebar {
-  background-color: #ffffff;
+  width: 260px;
+  background-color: var(--card-bg-color);
   border-right: 1px solid #eee;
-  padding-top: 2rem;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.04);
+  position: fixed;
+  top: 0;
+  left: 0;
   height: 100vh;
+  overflow-y: hidden;
+  z-index: 1020;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
 }
 
-.sidebar a {
-  display: block;
-  padding: 0.75rem 1rem;
-  color: var(--text-color);
-  font-weight: 500;
+.sidebar.mobile-visible {
+  transform: translateX(0);
 }
 
-.sidebar a:hover {
+@media (min-width: 992px) {
+  .sidebar {
+    transform: translateX(0);
+    position: relative;
+    height: auto;
+  }
+
+  .mobile-toggler,
+  .sidebar-close {
+    display: none;
+  }
+}
+
+.nav-link {
+  color: var(--text-color) !important;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
   background-color: var(--primary-color);
-  color: #fff;
-  border-radius: 0.5rem;
+  color: #ffffff !important;
+}
+
+.nav-link i {
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover i,
+.nav-link.active i {
+  color: var(--accent-color);
+}
+
+.logout-link:hover,
+.logout-link:focus {
+  background-color: #dc3545 !important;
+  color: #fff !important;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #5d1d99;
+  border-color: #5d1d99;
 }
 
 
@@ -233,19 +284,23 @@ a:hover {
   background: #fffbea;
   border-radius: 0.5rem;
   padding: 1rem;
+  text-align: center;
 }
 
 .testimonial-track {
+  width: 100%;
+  height: 100%;
+}
+
+.testimonial-track.flex-track {
   display: flex;
   gap: 1.5rem;
-  animation: scroll 30s linear infinite;
 }
 
 @keyframes scroll {
   0% {
     transform: translateX(0);
   }
-
   100% {
     transform: translateX(-50%);
   }
@@ -255,19 +310,44 @@ a:hover {
   flex: 0 0 auto;
   min-width: 300px;
   max-width: 350px;
-  height: 200px;
-  /* Increased height */
+  width: 100%;
+  height: auto;
   display: flex;
   align-items: center;
+  justify-content: center;
+  margin: 0 auto;
 }
 
 .testimonial-img {
-  width: 80px;
-  /* Increased image size */
-  height: 80px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   object-fit: cover;
 }
+
+.testimonial.fade {
+  transition: opacity 1s ease-in-out;
+}
+
+@media (max-width: 768px) {
+  .testimonial {
+    flex-direction: column;
+    text-align: center;
+    max-width: 90%;
+    padding: 1rem;
+  }
+
+  .testimonial-img {
+    margin-bottom: 1rem;
+    margin-right: 0;
+  }
+}
+.testimonial-track.flex-track:hover {
+  animation-play-state: paused;
+}
+
+
+
 
 .custom-modal {
   background-color: var(--card-bg-color);

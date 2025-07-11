@@ -15,8 +15,19 @@ urlpatterns = [
     path('internships/edit/<int:pk>/', views.edit_internship, name='edit_internship'),
     path('internships/delete/<int:pk>/', views.delete_internship, name='delete_internship'),
 
+    # Projects
+    path('projects/', views.project_list, name='project_list'),
+    path('project/<str:matric_number>/<int:pk>/', views.project_detail, name='project_detail'),
 
-    path('favorite/add/<str:matric_number>/', views.add_favorite, name='add_favorite'),
-    path('favorite/remove/<str:matric_number>/', views.remove_favorite, name='remove_favorite'),
+    # Researches
+    path('research/', views.research_list, name='research_list'),
+    path('research/<str:matric_number>/<int:pk>/', views.research_detail, name='research_detail'),
+
+    # Internships
+    path('internships/', views.internship_list, name='internship_list'),
+    path('internship/<str:matric_number>/<int:pk>/', views.internship_detail, name='internship_detail'),
+
+
+    
 
 ]

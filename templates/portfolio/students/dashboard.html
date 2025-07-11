@@ -1,31 +1,214 @@
 {% extends "base_with_sidebar.html" %}
+{% load static %}
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<h2>Welcome, {{ request.user.studentprofile.registry.first_name }}!</h2>
-<p class="text-muted">Here’s an overview of your portfolio.</p>
+<style>
+  .nav-tabs .nav-link.active {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+  
+</style>
 
-<ul class="nav nav-tabs mt-4" id="dashboardTabs" role="tablist">
-    <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="projects-tab" data-bs-toggle="tab" data-bs-target="#projects" type="button" role="tab">Projects</button>
-    </li>
-    <li class="nav-item" role="presentation">
-        <button class="nav-link" id="research-tab" data-bs-toggle="tab" data-bs-target="#research" type="button" role="tab">Research</button>
-    </li>
-    <li class="nav-item" role="presentation">
-        <button class="nav-link" id="internships-tab" data-bs-toggle="tab" data-bs-target="#internships" type="button" role="tab">Internships</button>
-    </li>
+<div class="container mt-5 mb-5">
+
+  <!-- Profile Card -->
+  <div class="card border-0 p-4 mb-4" style="background-color: transparent;">
+    <div class="row g-3 align-items-center flex-column flex-md-row text-center text-md-start">
+      <div class="col-md-4 d-flex justify-content-center">
+        {% if profile.profile_image %}
+          <img src="{{ profile.profile_image.url }}" 
+               alt="Profile Image" 
+               class="rounded-circle img-fluid" 
+               style="width: 150px; height: 150px; object-fit: cover;">
+        {% else %}
+          <img src="{% static 'images/user.jpg' %}" 
+               alt="Default Image" 
+               class="rounded-circle img-fluid" 
+               style="width: 150px; height: 150px; object-fit: cover;">
+        {% endif %}
+      </div>
+      <div class="col-md-8">
+        <h4 class="fw-semibold mb-1">
+          {{ profile.registry.first_name }} 
+          {% if profile.registry.middle_name %}{{ profile.registry.middle_name }} {% endif %}
+          {{ profile.registry.last_name }}
+        </h4>
+
+        {% if profile.header %}
+          <p class="text-muted fst-italic mb-1">{{ profile.header }}</p>
+        {% else %}
+          <p class="text-muted fst-italic mb-1">No headline provided yet.</p>
+        {% endif %}
+
+        <p class="text-muted mb-1">{{ profile.registry.department }}, {{ profile.registry.faculty }}</p>
+        <p class="mb-2"><strong>Level:</strong> {{ profile.registry.level }} &nbsp; | &nbsp; <strong>Year of Entry:</strong> {{ profile.registry.year_of_entry }}</p>
+        {% if profile.about %}
+          <p class="text-muted">{{ profile.about }}</p>
+        {% else %}
+          <p class="text-muted fst-italic">No about provided yet.</p>
+        {% endif %}
+
+        <div class="mt-2">
+          {% if profile.github_url %}
+            <a href="{{ profile.github_url }}" target="_blank" class="btn btn-sm btn-outline-dark me-2 mb-2 mb-md-0">
+              <i class="fab fa-github"></i> GitHub
+            </a>
+          {% endif %}
+          {% if profile.linkedin_url %}
+            <a href="{{ profile.linkedin_url }}" target="_blank" class="btn btn-sm btn-outline-primary mb-2 mb-md-0">
+              <i class="fab fa-linkedin"></i> LinkedIn
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% if not projects and not research and not internships %}
+    <!-- Feature Cards when empty -->
+    <div class="row justify-content-center my-5">
+      <div class="col-12 col-md-6 col-lg-4 mb-3">
+        <div class="feature-card p-4 text-center h-100">
+          <i class="fas fa-folder-open icon-large mb-3"></i>
+          <h5 class="fw-bold">Projects</h5>
+          <p class="text-muted">Manage and showcase your projects.</p>
+          <a href="{% url 'add_project' %}" class="btn btn-primary btn-sm">Add Project</a>
+        </div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 mb-3">
+        <div class="feature-card p-4 text-center h-100">
+          <i class="fas fa-flask icon-large mb-3"></i>
+          <h5 class="fw-bold">Research</h5>
+          <p class="text-muted">Highlight your research contributions.</p>
+          <a href="{% url 'add_research' %}" class="btn btn-primary btn-sm">Add Research</a>
+        </div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 mb-3">
+        <div class="feature-card p-4 text-center h-100">
+          <i class="fas fa-briefcase icon-large mb-3"></i>
+          <h5 class="fw-bold">Internships</h5>
+          <p class="text-muted">Show your professional experiences.</p>
+          <a href="{% url 'add_internship' %}" class="btn btn-primary btn-sm">Add Internship</a>
+        </div>
+      </div>
+    </div>
+
+  {% else %}
+    <!-- Tabs Section -->
+<ul class="nav nav-tabs mt-4 justify-content-center" id="dashboardTabs" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="projects-tab" data-bs-toggle="tab" data-bs-target="#projects" type="button" role="tab" aria-controls="projects" aria-selected="true">Projects</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="research-tab" data-bs-toggle="tab" data-bs-target="#research" type="button" role="tab" aria-controls="research" aria-selected="false">Research</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="internships-tab" data-bs-toggle="tab" data-bs-target="#internships" type="button" role="tab" aria-controls="internships" aria-selected="false">Internships</button>
+  </li>
 </ul>
 
-<div class="tab-content mt-3">
-    <div class="tab-pane fade show active" id="projects" role="tabpanel">
-        {% include "portfolio/partials/projects_list.html" %}
+
+    <div class="tab-content mt-4">
+
+      <!-- Projects Tab -->
+      <div class="tab-pane fade show active" id="projects" role="tabpanel" aria-labelledby="projects-tab">
+        {% if projects %}
+          <div class="row">
+            {% for project in projects %}
+              <div class="col-12 col-md-6 col-lg-4 mb-4">
+                <a href="{% url 'project_detail' project.student.registry.matric_number project.pk %}" class="text-decoration-none text-reset">
+                  <div class="card h-100 shadow-sm">
+                    <div class="card-body d-flex flex-column">
+                      <h5 class="card-title">{{ project.title }}</h5>
+                      <p class="card-text text-muted">{{ project.description|truncatewords:20 }}</p>
+                      <div class="mt-auto">
+                        {% if project.technologies %}
+                          <small class="d-block mb-1"><strong>Tech:</strong> {{ project.technologies }}</small>
+                        {% endif %}
+                        {% if project.repo_link %}
+                          <span class="badge bg-secondary"><i class="fas fa-code"></i> Repo available</span>
+                        {% endif %}
+                        {% if project.project_file %}
+                          <span class="badge bg-secondary"><i class="fas fa-file"></i> File attached</span>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="card text-center p-4">
+            <p class="text-muted mb-3">You haven't added any projects yet.</p>
+            <a href="{% url 'add_project' %}" class="btn btn-primary">Add Your First Project</a>
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Research Tab -->
+      <div class="tab-pane fade" id="research" role="tabpanel" aria-labelledby="research-tab">
+        {% if research %}
+          <div class="row">
+            {% for paper in research %}
+              <div class="col-12 col-md-6 col-lg-4 mb-4">
+                <a href="{% url 'research_detail' research.student.registry.matric_number paper.pk %}" class="text-decoration-none text-reset">
+                  <div class="card h-100 shadow-sm">
+                    <div class="card-body d-flex flex-column">
+                      <h5 class="card-title">{{ paper.title }}</h5>
+                      <p class="card-text text-muted">{{ paper.abstract|truncatewords:20 }}</p>
+                      <div class="mt-auto">
+                        {% if paper.publication_link %}
+                          <span class="badge bg-secondary"><i class="fas fa-globe"></i> Published</span>
+                        {% endif %}
+                        {% if paper.document %}
+                          <span class="badge bg-secondary"><i class="fas fa-file-pdf"></i> Document attached</span>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="card text-center p-4">
+            <p class="text-muted mb-3">You haven't added any research papers yet.</p>
+            <a href="{% url 'add_research' %}" class="btn btn-primary">Add Your First Research</a>
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Internships Tab -->
+      <div class="tab-pane fade" id="internships" role="tabpanel" aria-labelledby="internships-tab">
+        {% if internships %}
+          <div class="row">
+            {% for internship in internships %}
+              <div class="col-12 col-md-6 col-lg-4 mb-4">
+                <a href="{% url 'internship_detail' internship.student.registry.matric_number internship.pk %}" class="text-decoration-none text-reset">
+                  <div class="card h-100 shadow-sm">
+                    <div class="card-body d-flex flex-column">
+                      <h5 class="card-title">{{ internship.organization }}</h5>
+                      <h6 class="card-subtitle mb-2 text-muted">{{ internship.role }}</h6>
+                      <p class="text-muted mb-1"><strong>Duration:</strong> {{ internship.duration }}</p>
+                      <p class="card-text">{{ internship.summary|truncatewords:20 }}</p>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="card text-center p-4">
+            <p class="text-muted mb-3">You haven't added any internships yet.</p>
+            <a href="{% url 'add_internship' %}" class="btn btn-primary">Add Your First Internship</a>
+          </div>
+        {% endif %}
+      </div>
+
     </div>
-    <div class="tab-pane fade" id="research" role="tabpanel">
-        {% include "portfolio/partials/research_list.html" %}
-    </div>
-    <div class="tab-pane fade" id="internships" role="tabpanel">
-        {% include "portfolio/partials/internships_list.html" %}
-    </div>
+  {% endif %}
 </div>
 {% endblock %}

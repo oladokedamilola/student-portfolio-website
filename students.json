@@ -1,0 +1,124 @@
+{
+  "students": [
+    {
+      "matric_number": "202012345",
+      "first_name": "Aisha",
+      "middle_name": "Tunde",
+      "last_name": "Bello",
+      "faculty": "Science",
+      "department": "Computer Science",
+      "email": "aisha.bello@student.university.edu",
+      "dob": "2001-05-14",
+      "year_of_entry": 2023,
+      "level": 200
+    },
+    {
+      "matric_number": "201934782",
+      "first_name": "John",
+      "middle_name": "Ola",
+      "last_name": "Doe",
+      "faculty": "Engineering",
+      "department": "Mechanical Engineering",
+      "email": "john.doe@student.university.edu",
+      "dob": "2000-11-22",
+      "year_of_entry": 2022,
+      "level": 300
+    },
+    {
+      "matric_number": "202134567",
+      "first_name": "Fatima",
+      "middle_name": "Zainab",
+      "last_name": "Ahmed",
+      "faculty": "Arts",
+      "department": "English",
+      "email": "fatima.ahmed@student.university.edu",
+      "dob": "2002-07-10",
+      "year_of_entry": 2025,
+      "level": 100
+    },
+    {
+      "matric_number": "201845932",
+      "first_name": "David",
+      "middle_name": "Ifeanyi",
+      "last_name": "Ogun",
+      "faculty": "Social Sciences",
+      "department": "Economics",
+      "email": "david.ogun@student.university.edu",
+      "dob": "1999-03-05",
+      "year_of_entry": 2025,
+      "level": 100
+    },
+    {
+      "matric_number": "202034879",
+      "first_name": "Maryam",
+      "middle_name": "Halima",
+      "last_name": "Yusuf",
+      "faculty": "Science",
+      "department": "Computer Science",
+      "email": "maryam.yusuf@student.university.edu",
+      "dob": "2001-09-30",
+      "year_of_entry": 2025,
+      "level": 100
+    },
+    {
+      "matric_number": "202145698",
+      "first_name": "Emmanuel",
+      "middle_name": "Tobi",
+      "last_name": "Okoro",
+      "faculty": "Engineering",
+      "department": "Mechanical Engineering",
+      "email": "emmanuel.okoro@student.university.edu",
+      "dob": "2000-01-12",
+      "year_of_entry": 2024,
+      "level": 200
+    },
+    {
+      "matric_number": "201954321",
+      "first_name": "Ngozi",
+      "middle_name": "Ada",
+      "last_name": "Ibe",
+      "faculty": "Arts",
+      "department": "English",
+      "email": "ngozi.ibe@student.university.edu",
+      "dob": "2002-11-02",
+      "year_of_entry": 2024,
+      "level": 200
+    },
+    {
+      "matric_number": "202134124",
+      "first_name": "Umar",
+      "middle_name": "Kabir",
+      "last_name": "Sani",
+      "faculty": "Science",
+      "department": "Computer Science",
+      "email": "umar.sani@student.university.edu",
+      "dob": "2003-04-17",
+      "year_of_entry": 2025,
+      "level": 100
+    },
+    {
+      "matric_number": "202045911",
+      "first_name": "Chidera",
+      "middle_name": "Nneka",
+      "last_name": "Obi",
+      "faculty": "Social Sciences",
+      "department": "Economics",
+      "email": "chidera.obi@student.university.edu",
+      "dob": "2001-08-20",
+      "year_of_entry": 2024,
+      "level": 200
+    },
+    {
+      "matric_number": "201867532",
+      "first_name": "Samuel",
+      "middle_name": "Kehinde",
+      "last_name": "Ade",
+      "faculty": "Engineering",
+      "department": "Mechanical Engineering",
+      "email": "samuel.ade@student.university.edu",
+      "dob": "2000-06-06",
+      "year_of_entry": 2024,
+      "level": 200
+    }
+  ]
+}

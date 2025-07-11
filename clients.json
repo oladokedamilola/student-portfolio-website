@@ -1,0 +1,72 @@
+[
+  {
+    "nin": "12345678901",
+    "first_name": "Chinedu",
+    "middle_name": "Obinna",
+    "last_name": "Okafor",
+    "date_of_birth": "1990-05-12"
+  },
+  {
+    "nin": "23456789012",
+    "first_name": "Aisha",
+    "middle_name": "",
+    "last_name": "Abubakar",
+    "date_of_birth": "1995-08-23"
+  },
+  {
+    "nin": "34567890123",
+    "first_name": "Emeka",
+    "middle_name": "Chukwu",
+    "last_name": "Nwosu",
+    "date_of_birth": "1988-11-30"
+  },
+  {
+    "nin": "45678901234",
+    "first_name": "Ngozi",
+    "middle_name": "Ada",
+    "last_name": "Eze",
+    "date_of_birth": "1992-01-17"
+  },
+  {
+    "nin": "56789012345",
+    "first_name": "Babatunde",
+    "middle_name": "Oluwatobi",
+    "last_name": "Adebayo",
+    "date_of_birth": "1985-07-05"
+  },
+  {
+    "nin": "67890123456",
+    "first_name": "Fatima",
+    "middle_name": "",
+    "last_name": "Yusuf",
+    "date_of_birth": "1998-03-14"
+  },
+  {
+    "nin": "78901234567",
+    "first_name": "Uche",
+    "middle_name": "Ifeanyi",
+    "last_name": "Okeke",
+    "date_of_birth": "1993-09-22"
+  },
+  {
+    "nin": "89012345678",
+    "first_name": "Yetunde",
+    "middle_name": "",
+    "last_name": "Akinyemi",
+    "date_of_birth": "1991-12-03"
+  },
+  {
+    "nin": "90123456789",
+    "first_name": "Musa",
+    "middle_name": "",
+    "last_name": "Garba",
+    "date_of_birth": "1987-04-19"
+  },
+  {
+    "nin": "01234567890",
+    "first_name": "Ijeoma",
+    "middle_name": "Nkechi",
+    "last_name": "Umeh",
+    "date_of_birth": "1994-06-28"
+  }
+]

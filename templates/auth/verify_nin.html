@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Verify NIN{% endblock %}
+
+{% block content %}
+<div class="container my-5" style="max-width: 480px;">
+    <div class="card shadow-sm p-4 border-0 rounded-3">
+        <h4 class="text-center mb-4" style="color: var(--primary-color);">Verify Your NIN</h4>
+       <form method="post" novalidate>
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="{{ form.nin.id_for_label }}" class="form-label fw-semibold">NIN Number</label>
+                {{ form.nin }}
+                {% if form.nin.errors %}
+                    <div class="text-danger small mt-1">{{ form.nin.errors }}</div>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 rounded-pill py-2">Verify & Complete Registration</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block footer %} 
+    <footer class="bg-dark text-light text-center py-3 shadow-sm" style="margin-top:200px;">
+        <div class="container">
+            <small>&copy; {{ now|date:"Y" }} EduPortfolio. All rights reserved.</small>
+        </div>
+    </footer>
+{% endblock %}

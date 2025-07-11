@@ -1,0 +1,18 @@
+<!-- templates/portfolio/partials/internship_list.html -->
+<div class="row">
+    {% for internship in internships %}
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ internship.role }} at {{ internship.organization }}</h5>
+                    <p><strong>Duration:</strong> {{ internship.duration }}</p>
+                    <p class="card-text">{{ internship.summary|truncatewords:30 }}</p>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="col-12">
+            <p class="text-muted text-center">No internships added yet.</p>
+        </div>
+    {% endfor %}
+</div>
