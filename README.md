@@ -38,7 +38,7 @@ Students can showcase their projects, research, and internships professionally, 
 
 ```bash
 # Clone the repository
-git clone https://github.com/oladokedamilola/eduportfolio.git
+git clone https://github.com/oladokedamilola/student-portfolio-website.git
 cd eduportfolio
 
 # Create and activate a virtual environment
@@ -76,7 +76,7 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 ## 💬 Contact
 
 Developed with ❤️ by [Oladoke Damilola](https://github.com/oladokedamilola).
-Email: [oladokedamilola7@gmail.com](mailto:your.email@example.com)
+Email: [oladokedamilola7@gmail.com](mailto:oladokedamilola7@gmail.com)
 
 ```
 
