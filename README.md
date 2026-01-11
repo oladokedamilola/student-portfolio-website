@@ -1,6 +1,6 @@
 # EduPortfolio - Academic Portfolio Platform
 
-A Django-based web platform designed to empower final-year university students by providing a digital space to showcase academic accomplishments, skills, and professional experiences. The system bridges the gap between academia and industry by enabling students to create comprehensive digital portfolios accessible to verified recruiters and employers.
+A Django-based web platform designed to empower university students by providing a digital space to showcase academic accomplishments, skills, and professional experiences. The system bridges the gap between academia and industry by enabling students to create comprehensive digital portfolios accessible to verified recruiters and employers.
 
 ![EduPortfolio Dashboard](images/student-dashboard.png)
 
