@@ -9,6 +9,14 @@ from .models import *
 # ===========================
 
 def verify_matric(request):
+    if request.user.is_authenticated:
+        if request.user.role == "STUDENT":
+            return redirect('student_dashboard')
+        elif request.user.role == "CLIENT":
+            return redirect('client_dashboard')
+        else:
+            return redirect('home')
+
     """Step 1: Verify Matric Number"""
     if request.method == "POST":
         form = MatricVerificationForm(request.POST)
@@ -36,6 +44,13 @@ def verify_matric(request):
 
 
 def student_register(request):
+    if request.user.is_authenticated:
+        if request.user.role == "STUDENT":
+            return redirect('student_dashboard')
+        elif request.user.role == "CLIENT":
+            return redirect('client_dashboard')
+        else:
+            return redirect('home')
     """Step 2: Register student account after matric verification"""
     matric = request.session.get('verified_matric')
     if not matric:
@@ -73,6 +88,14 @@ def student_register(request):
 # ===========================
 
 def client_register(request):
+    if request.user.is_authenticated:
+        if request.user.role == "STUDENT":
+            return redirect('student_dashboard')
+        elif request.user.role == "CLIENT":
+            return redirect('client_dashboard')
+        else:
+            return redirect('home')
+        
     """Step 1: Client fills registration details"""
     if request.method == "POST":
         form = ClientRegistrationForm(request.POST)
@@ -96,7 +119,13 @@ def client_register(request):
 
 
 def verify_nin(request):
-    """Step 2: Verify NIN after client registration"""
+    if request.user.is_authenticated:
+        if request.user.role == "STUDENT":
+            return redirect('student_dashboard')
+        elif request.user.role == "CLIENT":
+            return redirect('client_dashboard')
+        return redirect('home')
+
     data = request.session.get('client_registration_data')
     if not data:
         messages.error(request, "⚠️ No registration data found. Please start again.")
@@ -106,43 +135,75 @@ def verify_nin(request):
         form = NINVerificationForm(request.POST)
         if form.is_valid():
             nin = form.cleaned_data['nin']
+
             try:
                 nin_record = NINDatabase.objects.get(nin=nin)
 
-                first_name_match = nin_record.first_name.lower() == data['first_name'].lower()
-                last_name_match = nin_record.last_name.lower() == data['last_name'].lower()
+                # Check if this NIN has already been used
+                if ClientProfile.objects.filter(nin=nin_record).exists():
+                    messages.error(request, "⚠️ This NIN has already been used to create an account.")
+                    return redirect('client_register')
 
-                if first_name_match and last_name_match:
-                    # Create user and profile
-                    user = User.objects.create_user(email=data['email'], password=data['password'], role='CLIENT')
-                    ClientProfile.objects.create(
-                        user=user,
-                        first_name=data['first_name'],
-                        last_name=data['last_name'],
-                        company_name=data['company_name'],
-                        industry=data['industry']
-                    )
-                    login(request, user)
+                # Match first and last names
+                first_name_match = nin_record.first_name.strip().lower() == data['first_name'].strip().lower()
+                last_name_match = nin_record.last_name.strip().lower() == data['last_name'].strip().lower()
 
-                    # Clear session
-                    del request.session['client_registration_data']
-
-                    messages.success(request, "✅ Your NIN has been verified and account created successfully! Welcome 🎉.")
-                    return redirect('client_dashboard')
-                else:
+                if not (first_name_match and last_name_match):
                     form.add_error(None, "❌ The names provided do not match our NIN records. Please check your details carefully.")
+                else:
+                    try:
+                        user = User.objects.create_user(
+                            email=data['email'],
+                            password=data['password'],
+                            role='CLIENT'
+                        )
+
+                        ClientProfile.objects.create(
+                            user=user,
+                            nin=nin_record,
+                            first_name=data['first_name'],
+                            last_name=data['last_name'],
+                            company_name=data['company_name'],
+                            industry=data['industry'],
+                        )
+
+                        login(request, user)
+                        del request.session['client_registration_data']
+
+                        messages.success(request, "✅ Your NIN has been verified and account created successfully! Welcome 🎉.")
+                        return redirect('client_dashboard')
+
+                    except Exception as e:
+                        print("Error creating account:", e)
+                        messages.error(request, "❌ Something went wrong while creating your account. Please try again.")
+                        return redirect('client_register')
+
             except NINDatabase.DoesNotExist:
                 form.add_error('nin', "❌ This NIN was not found. Please double-check your number.")
+            except Exception as e:
+                print("Unexpected verification error:", e)
+                messages.error(request, "❌ An unexpected error occurred. Please try again later.")
+                return redirect('client_register')
+
     else:
         form = NINVerificationForm()
 
     return render(request, 'auth/verify_nin.html', {'form': form})
+
 
 # ===========================
 # LOGIN
 # ===========================
 
 def login_view(request):
+    if request.user.is_authenticated:
+        if request.user.role == "STUDENT":
+            return redirect('student_dashboard')
+        elif request.user.role == "CLIENT":
+            return redirect('client_dashboard')
+        else:
+            return redirect('home')
+        
     """General login view for students and clients"""
     if request.method == "POST":
         form = LoginForm(request.POST)

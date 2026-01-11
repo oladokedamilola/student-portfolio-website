@@ -77,7 +77,7 @@ class StudentProfile(models.Model):
 
 class ClientProfile(models.Model):
     user = models.OneToOneField('User', on_delete=models.CASCADE)
-
+    nin = models.OneToOneField('NINDatabase', on_delete=models.SET_NULL, null=True, blank=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     company_name = models.CharField(max_length=100, blank=True)

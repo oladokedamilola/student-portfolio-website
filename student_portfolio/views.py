@@ -13,17 +13,32 @@ def home(request):
     return render(request, 'home.html')
 
 def public_search(request):
-    query = request.GET.get('q', '')
+    if request.user.is_authenticated:
+        if request.user.role == "STUDENT":
+            return redirect('student_dashboard')
+        else:
+            query = request.GET.get('q', '')
+            current_student = None
+            results = StudentProfile.objects.none()
 
-    results = StudentProfile.objects.none()  # Default empty queryset
+            # Get current student's profile if logged in and is a student
+            if request.user.is_authenticated and request.user.role == 'STUDENT':
+                try:
+                    current_student = request.user.studentprofile
+                except StudentProfile.DoesNotExist:
+                    current_student = None
 
-    if query:
-        results = StudentProfile.objects.filter(
-            Q(header__icontains=query) |
-            Q(projects__skills__name__icontains=query) |
-            Q(researches__skills__name__icontains=query) |
-            Q(internships__skills__name__icontains=query)
-        ).distinct()
+            if query:
+                results = StudentProfile.objects.filter(
+                    Q(header__icontains=query) |
+                    Q(projects__skills__name__icontains=query) |
+                    Q(researches__skills__name__icontains=query) |
+                    Q(internships__skills__name__icontains=query)
+                ).distinct()
+
+                # Exclude the current student's profile from the results
+                if current_student:
+                    results = results.exclude(id=current_student.id)
 
     return render(request, 'portfolio/public_search.html', {
         'query': query,

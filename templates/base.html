@@ -59,10 +59,6 @@
 
     <div class="collapse navbar-collapse" id="mainNavbar">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link {% if request.resolver_match.url_name == 'public_search' %}active{% endif %}" href="{% url 'public_search' %}">Search</a>
-        </li>
-
         {% if user.is_authenticated %}
           <!-- Dashboard link based on role -->
           {% if user.role == "STUDENT" %}
@@ -70,6 +66,9 @@
               <a class="nav-link" href="{% url 'student_dashboard' %}">Dashboard</a>
             </li>
           {% elif user.role == "CLIENT" %}
+            <li class="nav-item">
+              <a class="nav-link {% if request.resolver_match.url_name == 'public_search' %}active{% endif %}" href="{% url 'public_search' %}">Search</a>
+            </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'client_dashboard' %}">Dashboard</a>
             </li>
